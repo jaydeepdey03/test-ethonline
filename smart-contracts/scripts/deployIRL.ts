@@ -15,11 +15,9 @@ async function deploy() {
 }
 
 async function main() {
-    const irl = await hre.ethers.getContractAt("TestContract", "0xD704c224eE9de34669Af994d85567d9b6362487B")
+    const irl = await hre.ethers.getContractAt("TestContract", "0x82b35031B028a0f14F6aa0235c388399e7f8dA32")
 
-    const schemaIdHex = hre.ethers.toBigInt("0x12")
-
-    const tx2 = await irl.setSchemaID("0x12")
+    const tx2 = await irl.setSchemaID(0x12)
     await tx2.wait()
     console.log("Schema ID set")
 
@@ -33,8 +31,9 @@ async function main() {
     //     ["0x22"]
     // );
 
-    const tx4 = await irl.confirmMetIRL("0x87cd12be2cf76239294D97Ea4978Ee9cC19Fd283", "0x22")
+    const tx4 = await irl.confirmMetIRL("0x87cd12be2cf76239294D97Ea4978Ee9cC19Fd283", "hello world")
     await tx4.wait()
+    console.log("Confirmed MetIRL")
 
 
     const DidMeetIRLEvent = irl.getEvent("DidMeetIRL")

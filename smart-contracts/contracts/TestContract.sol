@@ -34,7 +34,7 @@ contract TestContract is Ownable {
         string memory extraData
     ) external returns (uint64) {
         address partyB = _msgSender();
-        bytes32 extraData1 = keccak256(abi.encodePacked(extraData));
+        bytes memory data1 = abi.encode(extraData);
         if (metIRLMapping[partyA] == partyB) {
             // B has confirm A's claim of having met them IRL
             // We now make an attestation of having actually met IRL
@@ -51,7 +51,7 @@ contract TestContract is Ownable {
                 dataLocation: DataLocation.ONCHAIN,
                 revoked: false,
                 recipients: recipients,
-                data: abi.encode(extraData1) // SignScan assumes this is from `abi.encode(...)`
+                data: data1 // SignScan assumes this is from `abi.encode(...)`
             });
             uint64 attestationId = spInstance.attest(a, "", "", "");
             emit DidMeetIRL(partyA, partyB, attestationId);
