@@ -1,0 +1,12 @@
+artifacts
+cache
+dist
+node_modules
+scripts
+deploy
+out
+*.log
+*.sol
+*.yaml
+*.lock
+package-lock.json

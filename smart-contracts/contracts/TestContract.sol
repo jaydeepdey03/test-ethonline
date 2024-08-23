@@ -5,6 +5,7 @@ import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {ISP} from "@ethsign/sign-protocol-evm/src/interfaces/ISP.sol";
 import {Attestation} from "@ethsign/sign-protocol-evm/src/models/Attestation.sol";
 import {DataLocation} from "@ethsign/sign-protocol-evm/src/models/DataLocation.sol";
+import "hardhat/console.sol";
 
 contract TestContract is Ownable {
     ISP public spInstance = ISP(0x4e4af2a21ebf62850fD99Eb6253E1eFBb56098cD);
@@ -34,6 +35,7 @@ contract TestContract is Ownable {
         string memory extraData
     ) external returns (uint64) {
         address partyB = _msgSender();
+        console.log("partyb %s", partyB);
         bytes memory data1 = abi.encode(extraData);
         if (metIRLMapping[partyA] == partyB) {
             // B has confirm A's claim of having met them IRL

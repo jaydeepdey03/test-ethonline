@@ -1,0 +1,7 @@
+name = "test-1"
+version = "0.1.0"
+authors = [""]
+
+[[programs]]
+path = "src/secret_addition.py"
+prime_size = 128
