@@ -15,11 +15,11 @@ async function deploy() {
 }
 
 async function main() {
-    const irl = await hre.ethers.getContractAt("TestContract", "0x82b35031B028a0f14F6aa0235c388399e7f8dA32")
+    const irl = await hre.ethers.getContractAt("TestContract", "0xf35Db5c08a6B29896bD9840778DEA84e1A131d6F")
 
-    const tx2 = await irl.setSchemaID(0x12)
-    await tx2.wait()
-    console.log("Schema ID set")
+    // const tx2 = await irl.setSchemaID(0x12)
+    // await tx2.wait()
+    // console.log("Schema ID set")
 
 
     const tx3 = await irl.claimMetIRL("0x3f93B8DCAf29D8B3202347018E23F76e697D8539")
@@ -31,7 +31,7 @@ async function main() {
     //     ["0x22"]
     // );
 
-    const tx4 = await irl.confirmMetIRL("0x87cd12be2cf76239294D97Ea4978Ee9cC19Fd283", "hello world")
+    const tx4 = await irl.confirmMetIRL("0x87cd12be2cf76239294D97Ea4978Ee9cC19Fd283", "helloworld")
     await tx4.wait()
     console.log("Confirmed MetIRL")
 
@@ -46,15 +46,19 @@ async function main() {
 
 
 
-deploy()
-    .then(() => process.exit(0))
-    .catch(error => {
-        console.error(error);
-        process.exit(1);
-    });
-// main()
+// deploy()
 //     .then(() => process.exit(0))
 //     .catch(error => {
 //         console.error(error);
 //         process.exit(1);
 //     });
+main()
+    .then(() => process.exit(0))
+    .catch(error => {
+        console.error(error);
+        process.exit(1);
+    });
+
+
+
+

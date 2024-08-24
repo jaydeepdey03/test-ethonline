@@ -5,11 +5,10 @@ import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {ISP} from "@ethsign/sign-protocol-evm/src/interfaces/ISP.sol";
 import {Attestation} from "@ethsign/sign-protocol-evm/src/models/Attestation.sol";
 import {DataLocation} from "@ethsign/sign-protocol-evm/src/models/DataLocation.sol";
-import "hardhat/console.sol";
 
 contract TestContract is Ownable {
     ISP public spInstance = ISP(0x4e4af2a21ebf62850fD99Eb6253E1eFBb56098cD);
-    uint64 public schemaId;
+    uint64 public schemaId = 0x12;
     mapping(address partyA => address partyB) public metIRLMapping;
 
     error ConfirmationAddressMismatch();
@@ -22,9 +21,9 @@ contract TestContract is Ownable {
     //     spInstance = ISP(instance);
     // }
 
-    function setSchemaID(uint64 schemaId_) external onlyOwner {
-        schemaId = schemaId_;
-    }
+    // function setSchemaID(uint64 schemaId_) external onlyOwner {
+    //     schemaId = schemaId_;
+    // }
 
     function claimMetIRL(address partyB) external {
         metIRLMapping[_msgSender()] = partyB;
@@ -32,11 +31,10 @@ contract TestContract is Ownable {
 
     function confirmMetIRL(
         address partyA,
-        string memory extraData
+        string memory data1
     ) external returns (uint64) {
+        bytes memory data = abi.encode(data1);
         address partyB = _msgSender();
-        console.log("partyb %s", partyB);
-        bytes memory data1 = abi.encode(extraData);
         if (metIRLMapping[partyA] == partyB) {
             // B has confirm A's claim of having met them IRL
             // We now make an attestation of having actually met IRL
@@ -53,7 +51,7 @@ contract TestContract is Ownable {
                 dataLocation: DataLocation.ONCHAIN,
                 revoked: false,
                 recipients: recipients,
-                data: data1 // SignScan assumes this is from `abi.encode(...)`
+                data: data // SignScan assumes this is from `abi.encode(...)`
             });
             uint64 attestationId = spInstance.attest(a, "", "", "");
             emit DidMeetIRL(partyA, partyB, attestationId);
