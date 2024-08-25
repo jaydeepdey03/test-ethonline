@@ -16,11 +16,13 @@ async function deploy() {
 async function main() {
     const GymOwnership = await hre.ethers.getContractAt('GymOwnership', '0x4f302267Ca14b30740d859665670b6fF2F2086FE')
 
-    const tx0 = await GymOwnership.setSchemaID(0xcd)
+    const tx0 = await GymOwnership.setSchemaID(0xcf)
     await tx0.wait()
     console.log(`Schema ID set`)
 
-    const tx1 = await GymOwnership.issueGymMembership('0x3f93B8DCAf29D8B3202347018E23F76e697D8539')
+    const tx1 = await GymOwnership.issueGymMembership('0x3f93B8DCAf29D8B3202347018E23F76e697D8539', {
+        value: hre.ethers.parseEther('0.0001')
+    })
     await tx1.wait()
     console.log(`Gym Membership issued`)
 

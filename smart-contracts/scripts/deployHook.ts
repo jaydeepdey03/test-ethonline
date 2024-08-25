@@ -1,6 +1,7 @@
 // https://testnet-scan.sign.global/schema/onchain_evm_84532_0xcb
 // https://testnet-scan.sign.global/schema/onchain_evm_84532_0xcc, 0xf28aa23940a8168a1483ec2661929934cd13c8ae
 // https://testnet-scan.sign.global/schema/onchain_evm_84532_0xcd, 0x7f5A1aAb7e66B09ceD592183130Cb084004217a7
+// https://testnet-scan.sign.global/schema/onchain_evm_84532_0xcf 0xa8E5027900978204E4e0611A8734020d951bC574
 
 
 import hre from 'hardhat'
@@ -19,7 +20,7 @@ async function deploy() {
     console.log('SchemaHookContract deployed to:', address)
 }
 async function main() {
-    const SchemaHookContract = await hre.ethers.getContractAt('SchemaHookContract', '0x7f5A1aAb7e66B09ceD592183130Cb084004217a7')
+    const SchemaHookContract = await hre.ethers.getContractAt('SchemaHookContract', '0xa8E5027900978204E4e0611A8734020d951bC574')
     const [signer0] = await hre.ethers.getSigners()
 
 
@@ -33,15 +34,15 @@ async function main() {
 
 }
 
-// deploy()
-//     .then(() => process.exit(0))
-//     .catch((error: any) => {
-//         console.error(error.message)
-//         process.exit(1)
-//     })
-main()
+deploy()
     .then(() => process.exit(0))
     .catch((error: any) => {
         console.error(error.message)
         process.exit(1)
     })
+// main()
+//     .then(() => process.exit(0))
+//     .catch((error: any) => {
+//         console.error(error.message)
+//         process.exit(1)
+//     })
