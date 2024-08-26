@@ -5,6 +5,8 @@ import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 
 contract DependentContract is Ownable {
+    constructor() Ownable(_msgSender()) {}
+
     struct Customer {
         address attester;
         uint64 schemaId;
@@ -13,16 +15,12 @@ contract DependentContract is Ownable {
         bool allowed;
     }
 
-    mapping(address => Customer) public isAllowedMapping;
-
-    constructor() Ownable(_msgSender()) {}
-
     function putToAllowedList(
         address customer,
         uint64 schemaId,
         uint64 attestationId,
         string memory extraData
-    ) public onlyOwner {
+    ) public {
         isAllowedMapping[customer] = Customer({
             attester: customer,
             schemaId: schemaId,
@@ -32,54 +30,61 @@ contract DependentContract is Ownable {
         });
     }
 
-    function checkIfAllowed(address customer) public view returns (bool) {
-        return isAllowedMapping[customer].allowed;
+    function checkIfAllowed(address customer) public view {
+        require(isAllowedMapping[customer].allowed, "Customer is not allowed");
+    }
+
+    uint256 public counter = 0;
+
+    mapping(address => Customer) public isAllowedMapping;
+
+    function incrementCounter() public {
+        counter++;
+    }
+
+    function getCounter() public view returns (uint256) {
+        return counter;
     }
 }
 
 contract SchemaHookContract is ISPHook, DependentContract {
     function didReceiveAttestation(
-        address attester,
-        uint64 schemaId,
-        uint64 attestationId,
-        bytes calldata extraData
+        address,
+        uint64,
+        uint64,
+        bytes calldata
     ) external payable {
-        putToAllowedList(
-            attester,
-            schemaId,
-            attestationId,
-            abi.decode(extraData, (string))
-        );
+        incrementCounter();
     }
 
     function didReceiveAttestation(
-        address attester,
-        uint64 schemaId,
-        uint64 attestationId,
-        IERC20 resolverFeeERC20Token,
-        uint256 resolverFeeERC20Amount,
-        bytes calldata extraData
+        address,
+        uint64,
+        uint64,
+        IERC20,
+        uint256,
+        bytes calldata
     ) external view {
-        checkIfAllowed(attester);
+        getCounter();
     }
 
     function didReceiveRevocation(
-        address attester,
-        uint64 schemaId,
-        uint64 attestationId,
-        bytes calldata extraData
+        address,
+        uint64,
+        uint64,
+        bytes calldata
     ) external payable {
-        checkIfAllowed(attester);
+        incrementCounter();
     }
 
     function didReceiveRevocation(
-        address attester,
-        uint64 schemaId,
-        uint64 attestationId,
-        IERC20 resolverFeeERC20Token,
-        uint256 resolverFeeERC20Amount,
-        bytes calldata extraData
+        address,
+        uint64,
+        uint64,
+        IERC20,
+        uint256,
+        bytes calldata
     ) external view {
-        checkIfAllowed(attester);
+        getCounter();
     }
 }

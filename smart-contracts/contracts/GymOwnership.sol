@@ -10,13 +10,16 @@ contract GymOwnership is Ownable {
     ISP public spInstance = ISP(0x4e4af2a21ebf62850fD99Eb6253E1eFBb56098cD);
     uint64 public schemaId;
 
+    function setSchemaID(uint64 schemaId_) external {
+        schemaId = schemaId_;
+    }
+
     // events
     event IssuedGymMembership(address indexed customer, uint64 attestationId);
 
     struct GymDocs {
         string name;
         uint256 age;
-        string[] docs;
         uint256 height;
         uint256 weight;
     }
@@ -25,21 +28,14 @@ contract GymOwnership is Ownable {
 
     constructor() Ownable(_msgSender()) {}
 
-    function setSchemaID(uint64 schemaId_) external onlyOwner {
-        schemaId = schemaId_;
-    }
+    // function setSchemaID(uint64 schemaId_) external onlyOwner {
+    //     schemaId = schemaId_;
+    // }
 
-    function issueGymMembership(
-        address customer
-    ) public payable returns (uint64) {
-        string[] memory docs = new string[](2);
-        docs[0] = "doc1";
-        docs[1] = "doc2";
-
+    function issueGymMembership(address customer) external returns (uint64) {
         GymDocs memory gymDocs = GymDocs({
             name: "fidal mathew",
             age: 22,
-            docs: docs,
             height: 160,
             weight: 100
         });
@@ -55,7 +51,7 @@ contract GymOwnership is Ownable {
             linkedAttestationId: 0,
             attestTimestamp: 0,
             revokeTimestamp: 0,
-            attester: address(this),
+            attester: _msgSender(),
             validUntil: 0,
             dataLocation: DataLocation.ONCHAIN,
             revoked: false,

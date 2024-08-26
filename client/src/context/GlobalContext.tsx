@@ -12,7 +12,7 @@ export default function GlobalContextProvider({
 }: {
   children: ReactNode;
 }) {
-  const SchemaId = "0xc3";
+  const SchemaId = "0xd6";
   const privateKey = ("0x" + process.env.NEXT_PUBLIC_PRIVATE_KEY!) as Hex;
   const account = privateKeyToAccount(privateKey);
 
